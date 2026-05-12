@@ -1,0 +1,7 @@
+src/midia/*
+!src/midia/fundo_alice.png
+!src/midia/fundo_davi.png
+!src/midia/parabens_alice.mp4
+!src/midia/parabens_davi.mp4
+__pycache__/
+.venv/
