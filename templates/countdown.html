@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contagem Regressiva - {{ nome }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .bg-gradient {
+            background: radial-gradient(circle at center, #0a0a1a 0%, #000000 100%);
+        }
+        .timer-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* EFEITO CAMALEÃO ANIMADO */
+        .text-camaleao {
+            background: linear-gradient(to right, #3b82f6, #8b5cf6, #ec4899, #3b82f6);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 4s linear infinite;
+            font-weight: 300;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+    </style>
+</head>
+<body class="bg-gradient text-white min-h-screen flex flex-col items-center justify-center p-6 text-center">
+
+    <div class="max-w-3xl w-full">
+        <h1 class="text-4xl md:text-6xl font-black mb-8 tracking-tighter italic text-blue-500 uppercase">
+            Quase lá, {{ nome }}!
+        </h1>
+        
+        <p class="text-2xl md:text-3xl mb-12 leading-relaxed text-camaleao">
+            "{{ mensagem }}"
+        </p>
+
+        <div class="grid grid-cols-4 gap-4 mb-16">
+            <div class="timer-card p-4 rounded-2xl">
+                <span id="days" class="block text-4xl md:text-6xl font-black">00</span>
+                <span class="text-xs text-gray-500 uppercase tracking-widest">Dias</span>
+            </div>
+            <div class="timer-card p-4 rounded-2xl">
+                <span id="hours" class="block text-4xl md:text-6xl font-black">00</span>
+                <span class="text-xs text-gray-500 uppercase tracking-widest">Horas</span>
+            </div>
+            <div class="timer-card p-4 rounded-2xl">
+                <span id="minutes" class="block text-4xl md:text-6xl font-black">00</span>
+                <span class="text-xs text-gray-500 uppercase tracking-widest">Minutos</span>
+            </div>
+            <div class="timer-card p-4 rounded-2xl border-blue-500/50">
+                <span id="seconds" class="block text-4xl md:text-6xl font-black text-blue-400">00</span>
+                <span class="text-xs text-gray-500 uppercase tracking-widest">Segundos</span>
+            </div>
+        </div>
+
+        <div class="mt-8">
+            <a href="/" class="text-gray-500 hover:text-white transition-all underline decoration-dotted text-sm">
+                ← Voltar para a entrada
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const dataAlvo = new Date("{{ data_alvo }}").getTime();
+
+        const x = setInterval(function() {
+            const agora = new Date().getTime();
+            const distancia = dataAlvo - agora;
+
+            const d = Math.floor(distancia / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distancia % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerHTML = d.toString().padStart(2, '0');
+            document.getElementById("hours").innerHTML = h.toString().padStart(2, '0');
+            document.getElementById("minutes").innerHTML = m.toString().padStart(2, '0');
+            document.getElementById("seconds").innerHTML = s.toString().padStart(2, '0');
+
+            if (distancia < 0) {
+                clearInterval(x);
+                location.reload(); 
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

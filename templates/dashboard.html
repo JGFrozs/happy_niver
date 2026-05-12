@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Aniversário!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Special+Elite&family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- FUNDOS DINÂMICOS --- */
+        @keyframes championsFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .bg-champions-animated { background: linear-gradient(-45deg, #000428, #004e92, #001f3f, #3b0764); background-size: 400% 400%; animation: championsFlow 12s ease infinite; }
+        
+        .glitter-bg { position: fixed; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px), radial-gradient(circle, rgba(216,180,254,0.6) 1.5px, transparent 1.5px); background-size: 30px 30px, 20px 20px; animation: glitterAnim 4s infinite linear; pointer-events: none; z-index: 1; }
+        @keyframes glitterAnim { 0% { background-position: 0 0; } 100% { background-position: 30px 60px; } }
+        
+        .fundo-overlay { position: fixed; inset: 0; background-size: cover; background-position: center; opacity: 0.35; z-index: 0; pointer-events: none; }
+
+        /* --- ESTILO PAPEL ANTIGO (PERGAMINHO) --- */
+        .estilo-carta { 
+            background: #f4e4bc;
+            background-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.05) 100%);
+            color: #3d2b1f;
+            font-family: 'Special Elite', serif;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8), inset 0 0 100px rgba(0,0,0,0.05);
+            transform: rotate(-1deg);
+            border: 1px solid #d2b48c;
+            transition: all 0.5s ease;
+        }
+        .titulo-antigo { font-family: 'Pirata One', cursive; letter-spacing: 2px; }
+        .assinatura-antiga { font-family: 'Great Vibes', cursive; font-size: 2.8rem; line-height: 1; }
+
+        /* --- ANIMAÇÃO DO ENVELOPE --- */
+        .envelope-wrapper { position: relative; cursor: pointer; perspective: 1000px; margin: 40px auto; width: 300px; height: 200px; transition: transform 0.3s ease; }
+        .envelope-wrapper:active { transform: scale(0.95); }
+        
+        .envelope { position: relative; width: 100%; height: 100%; background: #bc9d76; border-radius: 0 0 5px 5px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); z-index: 10; }
+        
+        /* Aba do Envelope */
+        .envelope::before {
+            content: ""; position: absolute; top: 0; left: 0;
+            border-left: 150px solid transparent; border-right: 150px solid transparent;
+            border-top: 100px solid #a68a64; transform-origin: top;
+            transition: transform 0.6s ease; z-index: 30;
+        }
+        
+        /* Efeito de abertura */
+        .aberto .envelope::before { transform: rotateX(180deg); z-index: 5; }
+        
+        .instrucao { animation: bounce 2s infinite; font-family: 'Pirata One', cursive; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    </style>
+</head>
+<body class="{% if nome == 'Davi' %}bg-champions-animated{% else %}bg-black{% endif %} text-white flex flex-col items-center min-h-screen p-4 text-center overflow-x-hidden">
+    
+    {% if arquivo_fundo %}
+        <div class="fundo-overlay" style="background-image: url('/static/midia/{{ arquivo_fundo }}');"></div>
+    {% endif %}
+
+    {% if nome == 'Alice' %}
+        <div class="glitter-bg"></div>
+    {% endif %}
+
+    <div class="relative z-10 w-full max-w-4xl mt-10">
+        <h1 class="text-3xl md:text-5xl font-black mb-4 drop-shadow-2xl">Olhei nos meus registros e vi que hoje é seu aniversário!</h1>
+        <p class="text-xl md:text-2xl mb-8">Parabéns, <span class="{% if nome == 'Alice' %}text-purple-400{% else %}text-blue-400{% endif %} font-bold underline">{{ nome }}</span>!</p>
+
+        <div class="relative mb-12 border-2 rounded-xl overflow-hidden shadow-2xl {% if nome == 'Alice' %}border-purple-300/40{% else %}border-blue-400/40{% endif %} bg-black">
+            <video controls autoplay class="w-full h-auto">
+                <source src="/static/midia/{{ arquivo_midia }}" type="video/mp4">
+                Seu navegador não suporta vídeos.
+            </video>
+        </div>
+
+        <div class="mt-16 flex flex-col items-center">
+            <p class="instrucao text-2xl mb-6 text-yellow-200">
+                Para {{ nome }}, toque no envelope
+            </p>
+            
+            <div id="envelopeWrapper" class="envelope-wrapper" onclick="abrirCarta()">
+                <div class="envelope"></div>
+                
+                <div id="cartaReal" class="estilo-carta hidden p-8 md:p-12 rounded-sm text-left absolute top-0 left-1/2 -translate-x-1/2 w-[92vw] max-w-2xl z-50">
+                    
+                    {% if nome == 'Davi' %}
+                    <div class="absolute top-4 right-4 opacity-10 text-5xl">⚽</div>
+                    <div class="space-y-6 text-lg leading-relaxed">
+                        <p class="titulo-antigo text-4xl border-b border-black/10 pb-2">Fala, Dada!</p>
+                        <p>Feliz Dia, meu pato favorito do FIFA! 🖤</p>
+                        <p>Que esse dia seja repleto de alegria e que você aproveite muito essa data que Deus escolheu para abençoar nossa família com você e sua irmã. Que Ele te dê muita sabedoria e continue conservando esse seu coração bondoso.</p>
+                        <p>Saiba que tenho um orgulho imenso de ter você como meu primo/irmão. E lembre-se: se precisar de qualquer coisa, pode me chamar. Sempre estarei aqui para te ajudar, aconselhar e até te dar um chocolate no FIFA rsrs.</p>
+                        <div class="pt-8">
+                            <p>Do seu primo que te ama,</p>
+                            <p class="assinatura-antiga text-blue-800 mt-2">Gabriel</p>
+                        </div>
+                    </div>
+
+                    {% elif nome == 'Alice' %}
+                    <div class="absolute top-4 right-4 opacity-10 text-5xl">✨</div>
+                    <div class="space-y-6 text-lg leading-relaxed">
+                        <p class="titulo-antigo text-4xl border-b border-black/10 pb-2">Oi, Lilica!</p>
+                        <p>Feliz dia, minha Belieber favorita! 💜</p>
+                        <p>Que esse dia seja repleto de alegria e que você aproveite muito essa data em que Deus abençoou nossa família com você e seu irmão. Que Ele te dê muita sabedoria e continue conservando esse seu coração bondoso.</p>
+                        <p>Saiba que tenho um orgulho imenso de ter você como minha prima/irmã. E, se precisar de qualquer coisa, pode me chamar. Sempre estarei aqui para te ajudar, aconselhar e até ser seu professor antes das provas rsrs.</p>
+                        <div class="pt-8">
+                            <p>Do seu primo que te ama,</p>
+                            <p class="assinatura-antiga text-purple-800 mt-2">Gabriel</p>
+                        </div>
+                    </div>
+
+                    {% else %}
+                    <div class="space-y-6 text-lg text-center">
+                        <p class="titulo-antigo text-4xl">Para: {{ nome }}</p>
+                        <p>Desejo a você um aniversário repleto de luz, saúde e muitas conquistas. Que seu dia seja tão especial quanto você!</p>
+                        <div class="pt-8 assinatura-antiga">Gabriel</div>
+                    </div>
+                    {% endif %}
+                    
+                    <p class="text-[10px] mt-10 border-t border-black/10 opacity-60 italic font-sans text-center pt-4">
+                        PROJETADO COM ❤️ POR GABRIEL_DEV_2026
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <a href="/" class="block mt-24 pb-20 text-gray-500 hover:text-white transition-all underline decoration-dotted text-sm">
+            ← Voltar para a entrada
+        </a>
+    </div>
+
+    <script>
+        function abrirCarta() {
+            const wrapper = document.getElementById('envelopeWrapper');
+            const carta = document.getElementById('cartaReal');
+            const instrucao = document.querySelector('.instrucao');
+
+            if (!wrapper.classList.contains('aberto')) {
+                // Abre o envelope
+                wrapper.classList.add('aberto');
+                instrucao.classList.add('hidden');
+
+                // Vibração tátil (se disponível)
+                if (navigator.vibrate) navigator.vibrate(50);
+
+                // Mostra a carta após a animação da tampa
+                setTimeout(() => {
+                    carta.classList.remove('hidden');
+                    // Rola a tela para focar na carta
+                    carta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 600);
+            }
+        }
+    </script>
+</body>
+</html>
