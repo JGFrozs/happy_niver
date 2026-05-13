@@ -1,4 +1,4 @@
-# 🎉 Happy Niver - Alice & Davi
+# 🎉 Happy Niver
 
 [PT-BR] Um sistema interativo de celebração desenvolvido com FastAPI, focado em proporcionar uma experiência dinâmica de contagem regressiva e homenagens em vídeo.
 
