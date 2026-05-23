@@ -21,7 +21,7 @@
         .cena-carta {
             perspective: 1000px;
             width: 92vw;
-            max-w: 2xl;
+            max-width: 42rem;
             margin: 0 auto;
         }
         .container-carta {
@@ -74,7 +74,7 @@
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
-<body class="{% if nome == 'Davi' %}bg-champions-animated{% else %}bg-black{% endif %} text-white flex flex-col items-center min-h-screen p-4 text-center overflow-x-hidden">
+<body class="{% if nome == 'Davi' %}bg-champions-animated{% elif nome == 'Priscila' %}bg-pink-600{% else %}bg-black{% endif %} text-white flex flex-col items-center min-h-screen p-4 text-center overflow-x-hidden transition-colors duration-500">
     
     {% if arquivo_fundo %}
         <div class="fundo-overlay" style="background-image: url('/static/midia/{{ arquivo_fundo }}');"></div>
@@ -87,17 +87,20 @@
     <div class="relative z-10 w-full max-w-4xl mt-10">
         <h1 class="text-3xl md:text-5xl font-black mb-4 drop-shadow-2xl">Olhei nos meus registros e vi que hoje é seu aniversário!</h1>
         <p class="text-xl md:text-2xl mb-8">Parabéns, 
-            <span class="{% if nome == 'Alice' %}text-purple-400{% elif nome == 'Priscila' %}text-pink-400{% else %}text-blue-400{% endif %} font-bold underline">
+            <span class="{% if nome == 'Alice' %}text-purple-300{% elif nome == 'Priscila' %}text-yellow-200{% else %}text-blue-400{% endif %} font-bold underline">
                 {{ nome }}
             </span>!
         </p>
 
-        <div class="relative mb-12 border-2 rounded-xl overflow-hidden shadow-2xl {% if nome == 'Alice' %}border-purple-300/40{% elif nome == 'Priscila' %}border-pink-400/40{% else %}border-blue-400/40{% endif %} bg-black">
+        <!-- O vídeo só carrega para os outros. Para a Priscila ele some completamente daqui -->
+        {% if nome != 'Priscila' %}
+        <div class="relative mb-12 border-2 rounded-xl overflow-hidden shadow-2xl {% if nome == 'Alice' %}border-purple-300/40{% else %}border-blue-400/40{% endif %} bg-black">
             <video controls autoplay class="w-full h-auto">
                 <source src="/static/midia/{{ arquivo_midia }}" type="video/mp4">
                 Seu navegador não suporta vídeos.
             </video>
         </div>
+        {% endif %}
 
         <div class="mt-16 flex flex-col items-center w-full">
             <p id="textoInstrucao" class="instrucao text-2xl mb-6 text-yellow-200">
@@ -108,7 +111,7 @@
                 <div class="envelope"></div>
             </div>
 
-            <!-- --- ESTRUTURA DA CARTA COM SISTEMA FLIP 3D --- -->
+            <!-- --- ESTRUTURA DA CARTA COM FLIP 3D --- -->
             <div id="cenaCarta" class="cena-carta hidden">
                 <div id="containerCarta" class="container-carta" ondblclick="virarCarta()">
                     
@@ -119,7 +122,7 @@
                         <div class="space-y-6 text-lg leading-relaxed">
                             <p class="titulo-antigo text-4xl border-b border-black/10 pb-2">Fala, Dada!</p>
                             <p>Feliz Dia, meu pato favorito do FIFA! 🖤</p>
-                            <p>Que esse dia seja repleto de alegria e que você aproveite muito essa data que Deus escolheu para abençoar nossa família com você e sua irmã. Que Ele te dê muita sabedoria e continue conservando esse seu coração bondoso.</p>
+                            <p>Que esse dia seja repleto de alegria e que você aproveite muito essa data que Deus escolheu para abençoar nossa family com você e sua irmã. Que Ele te dê muita sabedoria e continue conservando esse seu coração bondoso.</p>
                             <p>Saiba que tenho um orgulho imenso de ter você como meu primo/irmão. E lembre-se: se precisar de qualquer coisa, pode me chamar. Sempre estarei aqui para te ajudar, aconselhar e até te dar um chocolate no FIFA rsrs.</p>
                             <div class="pt-8">
                                 <p>Do seu primo que te ama,</p>
@@ -151,7 +154,7 @@
                             <div class="pt-6">
                                 <p class="italic text-base opacity-90">PS: Do seu sobrinho, Gabriel.</p>
                             </div>
-                            <p class="text-xs font-sans text-center text-pink-700/60 font-bold animate-pulse pt-4 border-t border-black/10">
+                            <p class="text-xs font-sans text-center text-pink-700/80 font-bold animate-pulse pt-4 border-t border-black/10">
                                 💡 Dê dois toques rápidos na carta para ver uma surpresa!
                             </p>
                         </div>
@@ -169,17 +172,17 @@
                         </p>
                     </div>
 
-                    <!-- LADO B: FOTO SECRETA (VERSO DA CARTA) -->
+                    <!-- LADO B: FOTO COM A TITIA (VERSO DA CARTA) -->
                     <div class="verso-carta estilo-papel p-4 flex flex-col items-center justify-center overflow-hidden">
                         <div class="w-full h-full flex flex-col items-center justify-center gap-2">
                             <p class="titulo-antigo text-2xl md:text-3xl text-center text-[#3d2b1f] border-b border-black/10 w-full pb-1">
                                 Nossa Lembrança 💖
                             </p>
-                            <!-- Contêiner para ajustar e desrotacionar a imagem mantendo a proporção -->
-                            <div class="relative w-full flex-1 flex items-center justify-center p-2 bg-white/40 rounded shadow-inner">
-                                <img src="/static/midia/foto eu com titia.jpeg" alt="Nossa Lembrança" class="max-w-full max-h-[60vh] object-contain rounded shadow-md rotate-90 md:rotate-90">
+                            <div class="relative w-full flex-1 flex items-center justify-center p-2 bg-white/40 rounded shadow-inner overflow-hidden">
+                                <!-- Caminho ajustado para bater com o static mount do FastAPI -->
+                                <img src="/static/midia/foto eu com titia.jpeg" alt="Nossa Lembrança" class="max-w-full max-h-[55vh] object-contain rounded shadow-md">
                             </div>
-                            <p class="text-xs font-sans text-center text-pink-700/60 font-bold mt-1">
+                            <p class="text-xs font-sans text-center text-pink-700/80 font-bold mt-1">
                                 💡 Dois toques para voltar à mensagem
                             </p>
                         </div>
@@ -189,7 +192,7 @@
             </div>
         </div>
         
-        <a href="/" class="block mt-24 pb-20 text-gray-500 hover:text-white transition-all underline decoration-dotted text-sm">
+        <a href="/" class="block mt-24 pb-20 text-gray-300 hover:text-white transition-all underline decoration-dotted text-sm">
             ← Voltar para a entrada
         </a>
     </div>

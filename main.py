@@ -8,6 +8,7 @@ from datetime import datetime
 app = FastAPI()
 
 # Configuração de templates e arquivos estáticos
+# Como directory="src", a rota "/static/midia/arquivo.png" vai buscar em "src/midia/arquivo.png"
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="src"), name="static")
 
@@ -53,7 +54,7 @@ async def verificar_nome(request: Request, nome_input: str = Form(...)):
     if ":" in entrada:
         senha, nome_teste = entrada.split(":", 1)
         if senha == CHAVE_MESTRA:
-            nome_original = nome_teste.strip().title()
+            nome_original = nome_teste.strip().title() # Garante a primeira letra maiúscula (ex: "Priscila")
             arquivo_midia = f"parabens_{nome_original.lower()}.mp4"
             arquivo_fundo = f"fundo_{nome_original.lower()}.png"
             
@@ -72,9 +73,13 @@ async def verificar_nome(request: Request, nome_input: str = Form(...)):
     mapeamento = {n.lower(): n for n in aniversariantes.keys()}
 
     if nome_clean in mapeamento:
-        nome_original = mapeamento[nome_clean]
-        # Pega MM-DD da string "YYYY-MM-DD"
-        data_niver_config = aniversariantes[nome_original].split("-", 1)[1]
+        # Força o nome a vir formatado como título (ex: "priscila" vira "Priscila")
+        # Isso garante que o Jinja2 no HTML valide corretamente a condicional {% elif nome == 'Priscila' %}
+        nome_original = mapeamento[nome_clean].title()
+        
+        # Pega MM-DD da string "YYYY-MM-DD" usando a chave original do seu arquivo lista.py
+        chave_original = mapeamento[nome_clean]
+        data_niver_config = aniversariantes[chave_original].split("-", 1)[1]
 
         # CASO A: É HOJE! (LIBERADO)
         if hoje_str == data_niver_config:
