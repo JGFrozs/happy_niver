@@ -1,0 +1,14 @@
+# Ignora todos os arquivos dentro de midia
+src/midia/*
+
+# Abre exceção apenas para os arquivos que o main.py usa
+!src/midia/fundo_alice.png
+!src/midia/fundo_davi.png
+!src/midia/parabens_alice.mp4
+!src/midia/parabens_davi.mp4
+!src/midia/eu_com_titia.png
+
+# Ignora arquivos de sistema e ambiente virtual
+__pycache__/
+.venv/
+.env
