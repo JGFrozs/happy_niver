@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Happy Niver</title>
+    <style>
+        body {
+            background: #0d1b2a; 
+            color: #FFFFFF;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: rgba(13, 27, 42, 0.8);
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid rgba(244, 185, 66, 0.2);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #F4B942;
+            text-shadow: 0 0 10px rgba(244, 185, 66, 0.3);
+        }
+
+        .btn-primary {
+            background: #F4B942;
+            color: #1E3A5F;
+            border: 2px solid #F4B942;
+            padding: 14px 35px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: #F4B942;
+            box-shadow: 0 0 15px rgba(244, 185, 66, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            border: 1px solid rgba(244, 185, 66, 0.5);
+            box-shadow: 0 0 30px rgba(244, 185, 66, 0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: auto; 
+            padding: 50px 30px;
+            max-width: 450px;
+            width: 85%;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(12px);
+        }
+
+        .hero h2 {
+            font-size: 2.2rem;
+            margin: 0 0 10px 0;
+            color: #FFFFFF;
+        }
+
+        .hero h2 span {
+            color: #F4B942;
+        }
+
+        .hero p {
+            color: #e0e1dd;
+            margin-bottom: 25px;
+            font-size: 1rem;
+        }
+
+        .input {
+            border: 2px solid #F4B942;
+            background: rgba(255,255,255,0.9);
+            padding: 14px;
+            border-radius: 8px;
+            color: #1E3A5F;
+            font-size: 15px;
+            outline: none;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            width: 100%;
+            max-width: 320px;
+            text-align: left;
+        }
+
+        .alerta-erro {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: center;
+            width: 100%;
+            max-width: 320px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Happy Niver</div>
+        <a href="/" class="btn-primary" style="padding: 8px 20px; font-size: 14px;">Voltar ao Início</a>
+    </header>
+
+    <section class="hero">
+        <h2>Salvar <span>Cadastro</span></h2>
+        <p>Insira seus dados abaixo para se cadastrar ou atualizar seu telefone atual.</p>
+        
+        <!-- Caso ocorra algum erro crítico de comunicação com a planilha -->
+        {% if erro %}
+            <div class="alerta-erro">
+                {{ erro }}
+            </div>
+        {% endif %}
+        
+        <form action="/cadastrar_novo" method="post" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+    
+            <div class="input-group">
+                <input type="text" name="nome_cliente" class="input" placeholder="Qual é o seu nome?" value="{{ nome_cliente or '' }}" required>
+            </div>
+    
+            <div class="input-group">
+                <input type="email" name="email" class="input" placeholder="Seu melhor e-mail" value="{{ email or '' }}" required>
+            </div>
+
+            <div class="input-group">
+                <input type="tel" name="telefone" class="input" placeholder="Seu WhatsApp / Telefone" value="{{ telefone or '' }}" required>
+            </div>
+    
+            <button type="submit" class="btn-primary" style="width: 100%; max-width: 320px; margin-top: 10px;">Salvar Dados</button>
+        </form>
+    </section>
+
+</body>
+</html>

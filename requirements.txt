@@ -2,3 +2,5 @@ fastapi
 uvicorn
 jinja2
 python-multipart
+gspread
+oauth2client

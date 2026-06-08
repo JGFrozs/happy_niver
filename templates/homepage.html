@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Niver - Seu espaço de eternizar afeto</title>
+    <style>
+        /* Configurações globais com a animação de transição de fundo */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+            color: #FFFFFF;
+            overflow-x: hidden;
+            
+            /* Uma paleta que transiciona entre o azul profundo e o rosa suave */
+            background: linear-gradient(135deg, #0d1b2a, #1b4965, #fbc2eb, #f687b3, #0d1b2a);
+            background-size: 400% 400%;
+            
+            /* Tempo de 16 segundos para uma troca bem suave e imperceptível */
+            animation: mudarFundo 16s ease infinite;
+        }
+
+        /* Camada de vidro embaçado por cima do gradê animado */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(50px);
+            z-index: -1;
+        }
+
+        /* Lógica que faz o degradê correr de um lado para o outro alternando as cores */
+        @keyframes mudarFundo {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: rgba(10, 15, 30, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #F4B942;
+            text-shadow: 0 0 10px rgba(244, 185, 66, 0.3);
+        }
+
+        /* Seção Principal (Hero) com contraste ajustado para ambos os fundos */
+        .hero {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: 40px auto;
+            padding: 60px 20px;
+            max-width: 900px;
+            width: 85%;
+            border-radius: 20px;
+            /* Um tom escuro semitransparente garante leitura seja no fundo rosa ou azul */
+            background: rgba(13, 27, 42, 0.45);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Cards de Recursos */
+        .card {
+            background: rgba(13, 27, 42, 0.55);
+            backdrop-filter: blur(12px);
+            border: 2px solid #F4B942;
+            border-radius: 20px;
+            color: #FFFFFF;
+            
+            padding: 30px;
+            width: 280px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+        }
+
+        .btn-primary {
+            background: #F4B942;
+            color: #0d1b2a; /* Texto escuro para dar contraste no botão dourado */
+            border: 2px solid #F4B942;
+            
+            padding: 14px 35px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: #FFFFFF;
+            border-color: #FFFFFF;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .input {
+            border: 2px solid #F4B942;
+            background: rgba(255,255,255,0.9);
+            
+            padding: 12px;
+            border-radius: 8px;
+            color: #1E3A5F;
+            font-size: 14px;
+            outline: none;
+            width: 250px;
+        }
+
+        /* Seção de recursos (grid dos cards) */
+        .features-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 40px 8%;
+            flex-wrap: wrap;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin: 0 0 10px 0;
+            color: #FFFFFF;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero h1 span {
+            color: #F4B942;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #e0e1dd;
+            margin-bottom: 30px;
+            font-style: italic;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Happy Niver</div>
+        <!-- Alterado o link para apontar para /cadastro -->
+        <a href="/cadastro" class="btn-primary" style="padding: 8px 20px; font-size: 14px;">Acessar Painel</a>
+    </header>
+
+    <section class="hero">
+        <h1>Bem-vindo ao <span>Happy Niver</span></h1>
+        <p>Seu espaço de eternizar afeto</p>
+        
+        <!-- Alterado o link para apontar para /cadastro -->
+        <a href="/cadastro" class="btn-primary">Descobrir Minha Surpresa</a>
+    </section>
+
+    <section class="features-container">
+        <div class="card">
+            <h3>🎁 Eternize Momentos</h3>
+            <p>Guarde textos, fotos e vídeos de felicitação em um espaço feito sob medida para quem você ama.</p>
+        </div>
+        
+        <div class="card">
+            <h3>⏳ No Tempo Certo</h3>
+            <p>O sistema conta os segundos e só libera o acesso à surpresa quando a meia-noite da datachave chegar.</p>
+        </div>
+
+        <div class="card">
+            <h3>🔒 Segurança e Afeto</h3>
+            <p>Seu painel protegido por uma mecânica de acesso exclusiva. Prático, seguro e inesquecível.</p>
+        </div>
+    </section>
+
+</body>
+</html>
