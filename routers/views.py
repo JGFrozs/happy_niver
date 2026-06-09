@@ -13,7 +13,14 @@ CHAVE_MESTRA = os.getenv("CHAVE_MESTRA")
 
 def get_gspread_client():
     escopo = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    credenciais = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json", escopo)
+    
+    # Resolve dinamicamente se o arquivo está no Render (/etc/secrets) ou localmente
+    if os.path.exists("/etc/secrets/credenciais.json"):
+        caminho_credenciais = "/etc/secrets/credenciais.json"
+    else:
+        caminho_credenciais = "credenciais.json"
+        
+    credenciais = ServiceAccountCredentials.from_json_keyfile_name(caminho_credenciais, escopo)
     return gspread.authorize(credenciais)
 
 def obter_aba_normalizada(planilha, nome_esperado):
