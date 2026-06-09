@@ -19,7 +19,14 @@ SMTP_PORT = 587
 
 def get_gspread_client():
     escopo = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    credenciais = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json", escopo)
+    
+    # Resolve dinamicamente se o arquivo está no Render (/etc/secrets) ou localmente
+    if os.path.exists("/etc/secrets/credenciais.json"):
+        caminho_credenciais = "/etc/secrets/credenciais.json"
+    else:
+        caminho_credenciais = "credenciais.json"
+        
+    credenciais = ServiceAccountCredentials.from_json_keyfile_name(caminho_credenciais, escopo)
     return gspread.authorize(credenciais)
 
 def obter_aba_normalizada(planilha, nome_esperado):
@@ -71,7 +78,7 @@ def salvar_cliente_sheets(nome_cliente, email, telefone):
 
 def enviar_email_boas_vindas(nome_cliente, email_destino):
     if not EMAIL_REMETENTE or not EMAIL_SENHA:
-        print("Aviso: Variáveis de e-mail ausentes no arquivo .env")
+        print("Aviso: Variáveis de e-mail ausentes no ambiente.")
         return False
     try:
         mensagem = MIMEMultipart()
@@ -79,7 +86,10 @@ def enviar_email_boas_vindas(nome_cliente, email_destino):
         mensagem["To"] = email_destino
         mensagem["Subject"] = f"Bem-vindo ao Happy Niver, {nome_cliente}! 🎉"
 
-        link_acesso = f"http://127.0.0.1:8000/cliente/{nome_cliente}/acesso"
+        # Identifica se está rodando no Render para usar a URL de produção no e-mail enviado
+        dominio_base = "https://happy-niver.onrender.com" if os.path.exists("/etc/secrets/credenciais.json") else "http://127.0.0.1:8000"
+        link_acesso = f"{dominio_base}/cliente/{nome_cliente}/acesso"
+        
         corpo_html = f"""
         <html>
             <body style="font-family: Arial, sans-serif; color: #333;">
