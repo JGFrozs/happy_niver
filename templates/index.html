@@ -6,16 +6,15 @@
     <title>Acesso VIP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Definindo a animação camaleão */
         @keyframes camaleao {
-            0% { border-color: #000000; box-shadow: 0 0 10px #000000; }     /* Preto */
-            15% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }    /* Vermelho */
-            30% { border-color: #ffff00; box-shadow: 0 0 15px #ffff00; }    /* Amarelo */
-            45% { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; }    /* Verde */
-            60% { border-color: #00ffff; box-shadow: 0 0 15px #00ffff; }    /* Ciano */
-            75% { border-color: #0000ff; box-shadow: 0 0 15px #0000ff; }    /* Azul */
-            90% { border-color: #ff00ff; box-shadow: 0 0 15px #ff00ff; }    /* Magenta */
-            100% { border-color: #ffffff; box-shadow: 0 0 20px #ffffff; }   /* Branco */
+            0% { border-color: #000000; box-shadow: 0 0 10px #000000; }     
+            15% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }    
+            30% { border-color: #ffff00; box-shadow: 0 0 15px #ffff00; }    
+            45% { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; }    
+            60% { border-color: #00ffff; box-shadow: 0 0 15px #00ffff; }    
+            75% { border-color: #0000ff; box-shadow: 0 0 15px #0000ff; }    
+            90% { border-color: #ff00ff; box-shadow: 0 0 15px #ff00ff; }    
+            100% { border-color: #ffffff; box-shadow: 0 0 20px #ffffff; }   
         }
 
         .border-camaleao {
@@ -31,8 +30,10 @@
         
         <h1 class="text-2xl font-bold mb-6 tracking-widest uppercase text-white">Digite seu nome</h1>
         
-        <form action="/verificar" method="post" class="space-y-4">
-            <input type="text" name="nome_input" placeholder="Digite seu nome..." required
+        <!-- O action usa a variável 'cliente' vinda da URL -->
+        <form action="/cliente/{{ cliente }}/verificar" method="post" class="space-y-4">
+            
+            <input type="text" name="usuario_input" placeholder="Digite seu nome..." required
                 class="w-full p-3 rounded bg-black border border-gray-700 text-white focus:border-white outline-none transition text-center">
             
             <button type="submit" 
@@ -44,6 +45,8 @@
         {% if erro %}
         <p class="text-red-500 mt-4 text-sm font-semibold italic">{{ erro }}</p>
         {% endif %}
+
+        <p class="text-gray-500 mt-4 text-xs">Próximo aniversário: {{ proximo_niver }}</p>
     </div>
 </body>
 </html>
