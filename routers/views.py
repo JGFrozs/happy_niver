@@ -14,7 +14,6 @@ CHAVE_MESTRA = os.getenv("CHAVE_MESTRA")
 def get_gspread_client():
     escopo = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     
-    # Resolve dinamicamente se o arquivo está no Render (/etc/secrets) ou localmente
     if os.path.exists("/etc/secrets/credenciais.json"):
         caminho_credenciais = "/etc/secrets/credenciais.json"
     else:
@@ -39,11 +38,12 @@ def buscar_aniversariante_no_sheets(nome_cliente_url, nome_digitado):
         for linha in registros:
             if str(linha["Cliente"]).strip().lower() == nome_cliente_url.strip().lower() and \
                str(linha["Nome"]).strip().lower() == nome_digitado.strip().lower():
+                # Retorna os nomes de chaves idênticos aos parâmetros do Jinja2
                 return {
-                    "Nome": linha["Nome"],
-                    "Data": linha["Data"],
-                    "video": linha["midia"],  
-                    "Fundo": linha["Fundo"]
+                    "nome": linha["Nome"],
+                    "data": linha["Data"],
+                    "arquivo_midia": linha["midia"],  
+                    "arquivo_fundo": linha["Fundo"]
                 }
         return None
     except Exception as e:
@@ -63,11 +63,13 @@ def obter_proximo_aniversario_por_cliente(nome_cliente):
             if str(linha["Cliente"]).strip().lower() == nome_cliente.strip().lower():
                 data_partes = linha["Data"].split("-")
                 data_obj = datetime(hoje.year, int(data_partes[1]), int(data_partes[2]))
-                if data_obj < hoje: data_obj = data_obj.replace(year=hoje.year + 1)
+                if data_obj < hoje: 
+                    data_obj = data_obj.replace(year=hoje.year + 1)
                 datas.append(data_obj)
         
         return min(datas).strftime("%Y-%m-%dT00:00:00") if datas else hoje.strftime("%Y-%m-%dT00:00:00")
-    except:
+    except Exception as e:
+        print(f"Erro ao obter próximo aniversário para o cliente {nome_cliente}: {e}")
         return datetime.now().strftime("%Y-%m-%dT00:00:00")
 
 # --- ROTAS DE VISUALIZAÇÃO ---
@@ -84,6 +86,7 @@ async def acesso_cliente(request: Request, nome_cliente: str):
 
 @router.post("/cliente/{nome_cliente}/verificar", response_class=HTMLResponse)
 async def verificar_cliente(request: Request, nome_cliente: str, usuario_input: str = Form(...)):
+    
     if ":" in usuario_input:
         senha, nome = usuario_input.split(":", 1)
         if senha == CHAVE_MESTRA:
@@ -94,22 +97,26 @@ async def verificar_cliente(request: Request, nome_cliente: str, usuario_input: 
             }
             return templates.TemplateResponse(request=request, name="dashboard.html", context=contexto)
 
+   
     dados = buscar_aniversariante_no_sheets(nome_cliente, usuario_input)
     if dados:
         hoje = datetime.now()
-        data_niver = datetime.strptime(dados["Data"], "%Y-%m-%d")
+        data_niver = datetime.strptime(dados["data"], "%Y-%m-%d")
         
+        # Se for o dia do aniversário, exibe o Dashboard dinâmico
         if hoje.month == data_niver.month and hoje.day == data_niver.day:
             contexto = {
-                "nome": dados["Nome"], 
-                "arquivo_midia": dados["video"], 
-                "arquivo_fundo": dados["Fundo"]
+                "nome": dados["nome"],
+                "arquivo_midia": dados["arquivo_midia"],
+                "arquivo_fundo": dados["arquivo_fundo"]
             }
             return templates.TemplateResponse(request=request, name="dashboard.html", context=contexto)
         else:
-            data_alvo = f"{hoje.year if data_niver.month >= hoje.month else hoje.year+1}-{dados['Data'][5:]}T00:00:00"
-            contexto = {"nome": dados["Nome"], "data_alvo": data_alvo}
+            # Caso contrário, redireciona para a página de contagem regressiva
+            data_alvo = f"{hoje.year if data_niver.month >= hoje.month else hoje.year+1}-{dados['data'][5:]}T00:00:00"
+            contexto = {"nome": dados["nome"], "data_alvo": data_alvo}
             return templates.TemplateResponse(request=request, name="countdown.html", context=contexto)
     
+    # Se não encontrar nada, retorna erro simples na tela de login
     contexto = {"erro": "Nome não encontrado", "cliente": nome_cliente}
     return templates.TemplateResponse(request=request, name="index.html", context=contexto)
